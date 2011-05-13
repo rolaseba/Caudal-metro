@@ -400,6 +400,7 @@ void nivel()
 while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
 {
   var1 = teclado();
+  va=0; // con esto solucione que se salga del submenu, en teclado debe estar el problema
   
   if(var1 == 11) //si presioné * me voy
   {
