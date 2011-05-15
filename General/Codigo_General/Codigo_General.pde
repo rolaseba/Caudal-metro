@@ -111,7 +111,7 @@ void loop()
 
 {
 
-otra_vez:
+otra_vez: 
 
 lcd.clear();
 lcd.print("1- Velocidad");
@@ -121,12 +121,7 @@ delay(500);
 
   
  
-var1 = teclado();  // cuando la fn teclado() no me encuentra nada, var1 deberia tener otro valor, asigno 20
- 
-while(var1 != 20)  //si no hay ninguna tecla apretada, var1=20 y no entro
-{
- var1 = teclado();
-
+var1 = teclado();
   switch (var1) 
   {
     case 1:  //menu 1
@@ -142,7 +137,7 @@ while(var1 != 20)  //si no hay ninguna tecla apretada, var1=20 y no entro
   
   }
 
-}
+//}
 goto otra_vez;
 
 otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
@@ -153,25 +148,23 @@ otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
       lcd.print("4- Caudal");
       delay(500);
 
-    
-while(var1 != 20)//hasta que no se presione una de las 3 teclas no hago nada
-{
-   var1 = teclado();
- 
+var1 = teclado();
+   
   switch (var1) 
   {
     case 3:
-      menu_3();
-      break;
+      
+       menu_3();
+       break;
     
     case 4:
-   //   menu=4;
+      // menu=4;
       
     case 11://tecla * 
       goto otra_vez; //vuelvo a las opciones 1-2
-     
+    
   }//cierro switch
-}//cierro while  
+//}  
 goto otra_vez1;
 
 }//cierro loop()
