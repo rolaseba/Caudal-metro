@@ -2,12 +2,14 @@
 #include <OneWire.h> //librería para sensor de temperatura DS18S20
 //****Declaración de funciones*****
 int nivel();
-void temperatura();
+float temperatura();
 void caudal();
 void velocidad();
 void rpm_fun();
 
-void menu_3();  //submenu del menu general
+void menu_2();	//menu para temperatura
+void menu_3();  //menu para nivel
+
 //*****Inicialización del display******
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 7);
@@ -41,7 +43,7 @@ int var2 = 20;
 int va=0;
 
 
-int mostrar;
+float mostrar;
 
 
 //***********Nivel******************
@@ -129,7 +131,7 @@ var1 = teclado();
        break;
           
     case 2:  //menu 2
-   //   menu2();
+       menu_2();
        break; 
     case 11: //tecla * avanza
        goto otra_vez1;
@@ -169,6 +171,24 @@ goto otra_vez1;
 
 }//cierro loop()
 //------------------------------------------
+ 
+void menu_2()
+{
+  mostrar=temperatura();
+  lcd.clear();
+  lcd.print("Temperatura");
+  lcd.setCursor(6, 1);
+  lcd.print("oC");  
+  
+  
+  while(var1 != 11)
+  {
+  var1 = teclado();
+  lcd.setCursor(0, 1);
+  lcd.print(mostrar);
+  }
+} 
+ 
  
 void menu_3()
 {
@@ -421,17 +441,9 @@ void velocidad()
 
 //*************************Temperatura*******************************************
 
-void temperatura()
+float temperatura()
 {
-   va=0;//flag que uso para tecla presionada
-   while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
-   {
-     var1 = teclado();
-     va=0; // con esto solucione que se salga del submenu, en teclado debe estar el problema
-      if(var1==11) //si presioné * me voy
-       {
-         va=1;
-       }
+ 
     byte i;
     byte present = 0;
     byte data[12];
@@ -444,7 +456,7 @@ void temperatura()
       //    Serial.print("No more addresses.\n");  //Aparentemente indica que no hay más dispositivos
       ds.reset_search();
       delay(250);
-      return;
+  //    return;
      }//cierro if
 
   //  Serial.print("R=");              //este paso se podría evitar, solo manda al puerto serie la dirección del dispositivo
@@ -494,20 +506,9 @@ void temperatura()
   temp=temp/2;
   //Serial.print(temp,2);
   //Serial.println();
-
-  // Print a message to the LCD.
-  lcd.clear();
-  //lcd.setCursor(0, 0);
-  lcd.print("Temperatura");
-  lcd.setCursor(0, 1);
-  lcd.print(temp);
-  lcd.setCursor(6, 1);
-  lcd.print("oC");
+  
  
- }//cierro while 
- delay(100);
- lcd.clear();
- return;   
+ return(temp);   
   
 }//cierro void temperatura
 
