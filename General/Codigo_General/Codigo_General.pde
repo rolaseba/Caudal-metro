@@ -37,11 +37,10 @@ int F4c = 0;
 int var = 20;
 int var1 = 20;
 int var2 = 20;
-int va = 0;
-int vb = 0;
-int i = 0;
 
-int var1_old;
+int va=0;
+
+
 int mostrar;
 
 
@@ -122,7 +121,7 @@ delay(500);
 
   
  
- var1 = teclado();  // cuando la fn teclado() no me encuentra nada, var1 deberia tener otro valor, asigno 20
+var1 = teclado();  // cuando la fn teclado() no me encuentra nada, var1 deberia tener otro valor, asigno 20
  
 while(var1 != 20)  //si no hay ninguna tecla apretada, var1=20 y no entro
 {
@@ -183,20 +182,18 @@ void menu_3()
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Nivel:");
-  va=0;
+  var1=20;
   
   
-  while(va == 0)
+  while(var1 != 11)
   {
   var1 = teclado();
-  if(var1==11)
-    break;
   
   mostrar=nivel();
   lcd.setCursor(0,1);
   lcd.print(mostrar);
   }
-      
+
 }//cierro menu_3
   
 
@@ -206,8 +203,7 @@ void menu_3()
 int teclado() //una vez que ingreso a la función queda ciclando hasta que se presione una tecla y retorna el valor de la misma
 {
   
-  va=0; //flag de tecla presionada
-  while(va==0) //bucle para ciclar hasta que una tecla sea presionada
+   while(1==1) //bucle para ciclar hasta que una tecla sea presionada
   {
   // columna1(pin4 teclado - pin 50 micro)  teclas 1-4-7
   digitalWrite(Columna1, HIGH); 
@@ -223,7 +219,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F1==digitalRead(Fila1)) 
      {
-       va=1;
+    
        return(1);//tecla 1
      }
   }//cierro if 1
@@ -234,7 +230,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F2==digitalRead(Fila2)) 
      {
-        va=1;
+    
         return(4);//tecla 4
      }
   }//cierro if 2
@@ -244,7 +240,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F3==digitalRead(Fila3)) 
      {
-        va=1;
+      
         return(7);//tecla 7
      }
   }//cierro if 3
@@ -261,7 +257,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F1==digitalRead(Fila1)) 
      {
-        va=1;
+     
         return(2);//tecla 2
      }
   }//cierro if 1
@@ -271,7 +267,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F2==digitalRead(Fila2)) 
      {
-        va=1;
+   
         return(5);//tecla 5
      }
   }//cierro if 2
@@ -281,7 +277,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F3==digitalRead(Fila3)) 
      {
-        va=1;
+    
         return(8);//tecla 8
      }
   }//cierro if 3
@@ -291,7 +287,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F4a==digitalRead(Fila4a)) 
      {
-       va=1;
+   
        return(0);//tecla 0
      }
   }//cierro if 4
@@ -305,7 +301,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F1==digitalRead(Fila1)) 
      {
-       va=1;
+  
        return(3);//tecla 3
      }
   }//cierro if 1
@@ -315,7 +311,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F2==digitalRead(Fila2)) 
      {
-       va=1;
+     
        return(6);//tecla 6
      }
   }//cierro if 2
@@ -329,7 +325,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F3==digitalRead(Fila3)) 
      {
-        va=1;
+     
         return(9);//tecla 9
      }
   }//cierro if 1
@@ -340,7 +336,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F4b==digitalRead(Fila4b)) 
      {
-        va=1;
+    
         return(10);//tecla #
      }
   }//cierro if 2
@@ -354,7 +350,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
     delay(50);
     if(F4c==digitalRead(Fila4c)) 
      {
-        va=1;
+   
         return(11);//tecla *
      }
   }//cierro if 1
@@ -375,26 +371,18 @@ int nivel()
 
   delay(50);
   // read the analog in value:
-  sensorValue = analogRead(analogInPin);            
+  sensorValue = analogRead(analogInPin);   
+  
   // map it to the range of the analog out:
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print(sensorValue);
-  outputValue = map(sensorValue, 0, 1023, 0, 255);  
-  // change the analog out value:
-  lcd.setCursor(0,1); 
-  lcd.print(outputValue);
-  // print the results to the serial monitor:
-                        
-  Serial.print(sensorValue);      
-  Serial.print(outputValue);
-
+  outputValue = map(sensorValue, 0, 1023, 0, 255);  //valor escalado
+  
+  
   // wait 10 milliseconds before the next loop
   // for the analog-to-digital converter to settle
   // after the last reading:
   delay(10);                  
 //}//cierro while
-return(sensorValue);
+return(outputValue);
   
 }//cierro void nivel
 
