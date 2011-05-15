@@ -1,12 +1,13 @@
 #include <LiquidCrystal.h>
 #include <OneWire.h> //librería para sensor de temperatura DS18S20
 //****Declaración de funciones*****
-void nivel();
+int nivel();
 void temperatura();
 void caudal();
 void velocidad();
 void rpm_fun();
-int menu();
+
+void menu_3();  //submenu del menu general
 //*****Inicialización del display******
 
 LiquidCrystal lcd(12, 11, 5, 4, 3, 7);
@@ -39,6 +40,10 @@ int var2 = 20;
 int va = 0;
 int vb = 0;
 int i = 0;
+
+int var1_old;
+int mostrar;
+
 
 //***********Nivel******************
 
@@ -104,61 +109,97 @@ void setup()
 //***********************************************************************************************************************************
 
 void loop()
-{ 
-  var = menu(); 		//busca var1 
-//****************************************
-  switch (var) 
+
+{
+
+otra_vez:
+
+lcd.clear();
+lcd.print("1- Velocidad");
+lcd.setCursor(0,1); 
+lcd.print("2- Temperatura");
+delay(500); 
+
+  
+ 
+ var1 = teclado();  // cuando la fn teclado() no me encuentra nada, var1 deberia tener otro valor, asigno 20
+ 
+while(var1 != 20)  //si no hay ninguna tecla apretada, var1=20 y no entro
+{
+ var1 = teclado();
+
+  switch (var1) 
   {
-    case 0:
+    case 1:  //menu 1
+   //   menu1();
+       break;
+          
+    case 2:  //menu 2
+   //   menu2();
+       break; 
+    case 11: //tecla * avanza
+       goto otra_vez1;
+       break;
+  
+  }
+
+}
+goto otra_vez;
+
+otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
+      
       lcd.clear();
-      lcd.print("Tecla 0"); 
-      delay(2000); 
-      break;
-    case 1:
-      velocidad();
-      break;
-    case 2:
-      temperatura();
-      break;
-    case 3:
-      nivel();
-      break;
-    case 4:
-      lcd.clear();
-      lcd.print("Caudal");
-      delay(2000);
-      break;
-    case 5:
-      lcd.clear();
-      lcd.print("Tecla 5");
-      break;
-    case 6:
-      lcd.clear();
-      lcd.print("Tecla 6");
-      break;
-    case 7:
-      lcd.clear();
-      lcd.print("Tecla 7");
-      break;
-    case 8:
-      lcd.clear();
-      lcd.print("Tecla 8");
-      break;
-    case 9:
-      lcd.clear();
-      lcd.print("Tecla 9");
-      break;
-    case 10: //#
-      lcd.clear();
-      lcd.print("Tecla #");
-      break;
-    case 11://*
-      lcd.clear();
-      lcd.print("Tecla *");
-      break;  
+      lcd.print("3- Nivel");
+      lcd.setCursor(0,1); 
+      lcd.print("4- Caudal");
+      delay(500);
+
     
+while(var1 != 20)//hasta que no se presione una de las 3 teclas no hago nada
+{
+   var1 = teclado();
+ 
+  switch (var1) 
+  {
+    case 3:
+      menu_3();
+      break;
+    
+    case 4:
+   //   menu=4;
+      
+    case 11://tecla * 
+      goto otra_vez; //vuelvo a las opciones 1-2
+     
   }//cierro switch
-}//cierro void
+}//cierro while  
+goto otra_vez1;
+
+}//cierro loop()
+//------------------------------------------
+ 
+void menu_3()
+{
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Nivel:");
+  va=0;
+  
+  
+  while(va == 0)
+  {
+  var1 = teclado();
+  if(var1==11)
+    break;
+  
+  mostrar=nivel();
+  lcd.setCursor(0,1);
+  lcd.print(mostrar);
+  }
+      
+}//cierro menu_3
+  
+
 
 //***********************************************************************************************************************
 
@@ -319,93 +360,19 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   }//cierro if 1
   digitalWrite(Columna3c, LOW);
   }//cierro while
+
+
+// agrego  
+var1=20; // 20 es el valor que toma var cuando no hay tecla
+  
   
 }//cierro teclado
 
-//************************************************************************************************************
-
-
-//************************************************************************************************************
-
-int menu()
-{
-otra_vez:
-  lcd.clear();
-  lcd.print("1- Velocidad");
-  lcd.setCursor(0,1); 
-  lcd.print("2- Temperatura");
-  delay(300);
-va=0;//flag que uso para tecla presionada
-while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
-{
-  var1 = teclado();
-  
-  switch (var1) 
-  {
-    case 1:
-      va=1;
-      return(1); //vuelvo a la llama del menu y le paso la tecla 0
-    //  break;
-    case 2:
-      va=1;
-      return(2); //vuelvo a la llama del menu y le paso la tecla 1
-    //  break;
-    case 11: //tecla * avanza
-      va=1;
-      goto otra_vez1;
-    //  break;
-  }
-}//cierro while
-
-otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
-      lcd.clear();
-      lcd.print("3- Nivel");
-      lcd.setCursor(0,1); 
-      lcd.print("4- Caudal");
-      delay(300);
-va=0;//flag que uso para tecla presionada
-while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
-{
-   var1 = teclado();
-  
-  switch (var1) 
-  {
-    case 3:
-      va=1;
-      return(3); //vuelvo a la llama del menu y le paso la tecla 0
-   //   break;
-    case 4:
-      va=1;
-      return(4); //vuelvo a la llama del menu y le paso la tecla 1
-   //   break;
-    case 11: //tecla * avanza
-      va=1;
-      goto otra_vez1;
-   //   break;
-    case 10://tecla # retrocede
-      va=1;
-      goto otra_vez; //vuelvo a las opciones 1-2
-  //    break;
-  }//cierro switch
-}//cierro while  
-  
-  
-}//cierro void menu
-
 //***********************Nivel**********************************************
 
-void nivel()
+int nivel()
 {
- va=0;//flag que uso para tecla presionada
-while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
-{
-  var1 = teclado();
-  va=0; // con esto solucione que se salga del submenu, en teclado debe estar el problema
-  
-  if(var1 == 11) //si presioné * me voy
-  {
-      va=1;
-  }
+
   delay(50);
   // read the analog in value:
   sensorValue = analogRead(analogInPin);            
@@ -422,18 +389,12 @@ while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
   Serial.print(sensorValue);      
   Serial.print(outputValue);
 
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Nivel:");
-  lcd.setCursor(0,1);
-  lcd.print(sensorValue);
   // wait 10 milliseconds before the next loop
   // for the analog-to-digital converter to settle
   // after the last reading:
   delay(10);                  
-}//cierro while
-delay(1000);
-return;
+//}//cierro while
+return(sensorValue);
   
 }//cierro void nivel
 
@@ -442,8 +403,6 @@ return;
 void velocidad()
 {  
    lcd.clear();
-   lcd.print("Midiendo");
-   lcd.setCursor(0,1); 
    lcd.print("Velocidad");
    digitalWrite(2, HIGH); //pullup
    attachInterrupt(0, rpm_fun, RISING); //declaro interrupción 0, es pin 2, cuando interrumpe llama a rpm_fun
@@ -454,6 +413,7 @@ void velocidad()
    while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
    {
      var1 = teclado();
+     va=0; // con esto solucione que se salga del submenu, en teclado debe estar el problema
       if(var1==11) //si presioné * me voy
        {
          va=1;
@@ -466,10 +426,10 @@ void velocidad()
         timeold = millis();   //tiempo de inicio del programa
         rpmcount = 0;
         Serial.println(rpm,DEC);
+	lcd.setCursor(0, 1);
+        lcd.print(rpm);
        }//cierro if
    }//cierro while
-   delay(300);
-   lcd.clear();
    return;
 }//cierro void velocidad
  void rpm_fun()
@@ -486,6 +446,7 @@ void temperatura()
    while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
    {
      var1 = teclado();
+     va=0; // con esto solucione que se salga del submenu, en teclado debe estar el problema
       if(var1==11) //si presioné * me voy
        {
          va=1;
