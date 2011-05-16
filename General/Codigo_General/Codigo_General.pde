@@ -4,9 +4,10 @@
 int nivel();
 float temperatura();
 void caudal();
-void velocidad();
+int velocidad();
 void rpm_fun();
 
+void menu_1();
 void menu_2();	//menu para temperatura
 void menu_3();  //menu para nivel
 
@@ -60,9 +61,12 @@ int outputValue = 0;        // value output to the PWM (analog out)
  unsigned int rpm;
  unsigned long timeold;
  
+ 
 //**********Temperatura************
 
+float temp;
 OneWire  ds(10);  // on pin 10
+unsigned long timeold1=0;
 
 //************************************
 void setup() 
@@ -119,7 +123,7 @@ lcd.clear();
 lcd.print("1- Velocidad");
 lcd.setCursor(0,1); 
 lcd.print("2- Temperatura");
-delay(200); 
+delay(400); 
 
   
  
@@ -127,19 +131,19 @@ var1 = teclado();
   switch (var1) 
   {
     case 1:  //menu 1
-   //   menu1();
-       break;
+	menu_1();
+	break;
           
     case 2:  //menu 2
-       menu_2();
-       break; 
+	menu_2();
+	break; 
     case 11: //tecla * avanza
-       goto otra_vez1;
-       break;
+	goto otra_vez1;
+	break;
   
   }
 
-//}
+
 goto otra_vez;
 
 otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
@@ -148,7 +152,7 @@ otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
       lcd.print("3- Nivel");
       lcd.setCursor(0,1); 
       lcd.print("4- Caudal");
-      delay(200);
+      delay(400);
 
 var1 = teclado();
    
@@ -166,11 +170,40 @@ var1 = teclado();
       goto otra_vez; //vuelvo a las opciones 1-2
     
   }//cierro switch
-//}  
+
 goto otra_vez1;
 
 }//cierro loop()
 //------------------------------------------
+ 
+ 
+ 
+void menu_1()
+{
+  
+  lcd.clear();
+  lcd.print("Velocidad");
+  lcd.setCursor(5,1);
+  lcd.print("RPM"); 
+  
+  while(var1 != 11)
+  {
+  var1 = teclado();
+  lcd.setCursor(0, 1);
+  mostrar=velocidad();
+  lcd.print(mostrar,0);
+  
+  if (mostrar==0)		// se podria simplificar sobreescribiendo 000
+    {
+    lcd.clear();
+    lcd.print("Velocidad");
+    lcd.setCursor(5,1);
+    lcd.print("RPM");
+    lcd.setCursor(0, 1);
+    lcd.print(0);
+    }
+  }
+} //cierro menu_1 
  
 void menu_2()
 {
@@ -196,6 +229,7 @@ void menu_3()
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Nivel:");
+ 
   var1=20;
   
   
@@ -206,6 +240,7 @@ void menu_3()
   mostrar=nivel();
   lcd.setCursor(0,1);
   lcd.print(mostrar,0);// 0 para mostrar cero decimales
+    
   }
 
 }//cierro menu_3
@@ -229,7 +264,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
  F1 = digitalRead(Fila1);
   if(F1 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F1==digitalRead(Fila1)) 
      {
     
@@ -240,7 +275,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
  F2 = digitalRead(Fila2);
   if(F2 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F2==digitalRead(Fila2)) 
      {
     
@@ -250,7 +285,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
  F3 = digitalRead(Fila3);
   if(F3 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F3==digitalRead(Fila3)) 
      {
       
@@ -267,7 +302,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F1 = digitalRead(Fila1);
   if(F1 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F1==digitalRead(Fila1)) 
      {
      
@@ -277,7 +312,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F2 = digitalRead(Fila2);
   if(F2 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F2==digitalRead(Fila2)) 
      {
    
@@ -287,7 +322,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F3 = digitalRead(Fila3);
   if(F3 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F3==digitalRead(Fila3)) 
      {
     
@@ -297,7 +332,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F4a = digitalRead(Fila4a);
   if(F4a == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F4a==digitalRead(Fila4a)) 
      {
    
@@ -311,7 +346,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F1 = digitalRead(Fila1);
   if(F1 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F1==digitalRead(Fila1)) 
      {
   
@@ -321,7 +356,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F2 = digitalRead(Fila2);
   if(F2 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F2==digitalRead(Fila2)) 
      {
      
@@ -335,7 +370,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F3 = digitalRead(Fila3);
   if(F3 == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F3==digitalRead(Fila3)) 
      {
      
@@ -346,7 +381,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   //  F3 = digitalRead(Fila3);
   if(F4b == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F4b==digitalRead(Fila4b)) 
      {
     
@@ -360,7 +395,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
   F4c = digitalRead(Fila4c);
   if(F4c == HIGH)
   { 
-    delay(50);
+    delay(10);
     if(F4c==digitalRead(Fila4c)) 
      {
    
@@ -401,24 +436,16 @@ return(outputValue);
 
 //*************************Velocidad*******************************************
 
-void velocidad()
+int velocidad()
 {  
-   lcd.clear();
-   lcd.print("Velocidad");
+ 
    digitalWrite(2, HIGH); //pullup
    attachInterrupt(0, rpm_fun, RISING); //declaro interrupción 0, es pin 2, cuando interrumpe llama a rpm_fun
    rpmcount = 0;
    rpm = 0;
    timeold = 0;
-   va=0;//flag que uso para tecla presionada
-   while(va==0)//hasta que no se presione una de las 3 teclas no hago nada
-   {
-     var1 = teclado();
-     va=0; // con esto solucione que se salga del submenu, en teclado debe estar el problema
-      if(var1==11) //si presioné * me voy
-       {
-         va=1;
-       }
+   delay(1000); 
+     
        if (rpmcount >= 20)  
        { 
         // Update RPM every 20 counts, increase this for better RPM resolution,
@@ -427,13 +454,13 @@ void velocidad()
         timeold = millis();   //tiempo de inicio del programa
         rpmcount = 0;
         Serial.println(rpm,DEC);
-	lcd.setCursor(0, 1);
-        lcd.print(rpm);
+	
        }//cierro if
-   }//cierro while
-   return;
+   
+   return(rpm);
 }//cierro void velocidad
- void rpm_fun()
+ 
+void rpm_fun()
  {
    rpmcount++;
    //Each rotation, this interrupt function is run twice
@@ -448,9 +475,10 @@ float temperatura()
     byte present = 0;
     byte data[12];
     byte addr[8];
-    float temp;
+    
     byte signo;
-
+    
+    
     if ( !ds.search(addr)) 
      {
       //    Serial.print("No more addresses.\n");  //Aparentemente indica que no hay más dispositivos
@@ -481,7 +509,13 @@ float temperatura()
   ds.reset();
   ds.select(addr);
   ds.write(0x44,1);         // start conversion, with parasite power on at the end
-  delay(800);     // maybe 750ms is enough, maybe not
+  
+  if( 800 > (millis() - timeold1))
+    return(temp);
+    
+  
+  timeold1 = millis();
+  //delay(800);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
   present = ds.reset();
   ds.select(addr);    
