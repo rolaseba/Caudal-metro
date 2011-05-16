@@ -1,15 +1,18 @@
 #include <LiquidCrystal.h>
 #include <OneWire.h> //librería para sensor de temperatura DS18S20
 //****Declaración de funciones*****
+
+int velocidad();
 int nivel();
 float temperatura();
-void caudal();
-int velocidad();
+float caudal();
+
 void rpm_fun();
 
-void menu_1();
+void menu_1();	//menu para velocidad
 void menu_2();	//menu para temperatura
 void menu_3();  //menu para nivel
+void menu_4();  //menu para caudal
 
 //*****Inicialización del display******
 
@@ -68,6 +71,11 @@ float temp;
 OneWire  ds(10);  // on pin 10
 unsigned long timeold1=0;
 
+//***********Caudal****************
+ int ancho = 200; 	// en [milimetros], ancho de la canaleta
+ float valor_caudal=0; 	// en [m³/s]
+ int factor=20;		// valor a setear, explicado mejor en caudal()
+ 
 //************************************
 void setup() 
 {
@@ -164,8 +172,8 @@ var1 = teclado();
        break;
     
     case 4:
-      // menu=4;
-      
+       menu_4();
+	break;
     case 11://tecla * 
       goto otra_vez; //vuelvo a las opciones 1-2
     
@@ -244,6 +252,35 @@ void menu_3()
   }
 
 }//cierro menu_3
+
+void menu_4()
+{
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Caudal:");
+ 
+  var1=20;
+  
+  
+  while(var1 != 11)
+  {
+  var1 = teclado();
+  
+ // mostrar=caudal();
+    
+  lcd.setCursor(0,1);
+  lcd.print(caudal(),2);// 0 para mostrar cero decimales
+  
+  
+  if (mostrar==0)		// se podria simplificar sobreescribiendo 000
+    {
+    lcd.print(0,5);
+    }
+  
+  
+  }
+
+}//cierro menu_4
   
 
 
@@ -548,8 +585,26 @@ float temperatura()
 
 //********************************************************************
 
-void caudal()
+float caudal()
 {
+  float vel;
+  float area;
+  
+  // Supongo que el ancho=200 milimetros. Fue definido arriba pero luego debería setearse
+  // ver si se puede grabar en la EEPROM los sets 
+  // Supongo que nivel() devuelve en milimetros  
+  area=(nivel()*ancho)/100; // la cuenta es en [mm] pero /100 para pasar a [metro]
+  
+  
+  //convierto rpm en [m/s], para eso debo hacer un ensayo y encontrar un factor de conversión "factor"
+  //por ejemplo si a 20 [rpm], el agua avanza 1[m]  -> factor = 20;
+  vel=velocidad()/factor;
+   
+      valor_caudal=area * vel;   // en [m³/s]
+    
+  return(valor_caudal);
+  
+  
 }//cierro void caudal
 
 //********************************************************************
