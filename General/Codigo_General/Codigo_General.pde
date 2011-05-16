@@ -119,7 +119,7 @@ lcd.clear();
 lcd.print("1- Velocidad");
 lcd.setCursor(0,1); 
 lcd.print("2- Temperatura");
-delay(500); 
+delay(200); 
 
   
  
@@ -148,7 +148,7 @@ otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
       lcd.print("3- Nivel");
       lcd.setCursor(0,1); 
       lcd.print("4- Caudal");
-      delay(500);
+      delay(200);
 
 var1 = teclado();
    
@@ -174,7 +174,7 @@ goto otra_vez1;
  
 void menu_2()
 {
-  mostrar=temperatura();
+  
   lcd.clear();
   lcd.print("Temperatura");
   lcd.setCursor(6, 1);
@@ -185,9 +185,10 @@ void menu_2()
   {
   var1 = teclado();
   lcd.setCursor(0, 1);
+  mostrar=temperatura();
   lcd.print(mostrar);
   }
-} 
+} //cierro menu_2
  
  
 void menu_3()
@@ -204,7 +205,7 @@ void menu_3()
   
   mostrar=nivel();
   lcd.setCursor(0,1);
-  lcd.print(mostrar);
+  lcd.print(mostrar,0);// 0 para mostrar cero decimales
   }
 
 }//cierro menu_3
@@ -216,8 +217,7 @@ void menu_3()
 int teclado() //una vez que ingreso a la función queda ciclando hasta que se presione una tecla y retorna el valor de la misma
 {
   
-   while(1==1) //bucle para ciclar hasta que una tecla sea presionada
-  {
+  
   // columna1(pin4 teclado - pin 50 micro)  teclas 1-4-7
   digitalWrite(Columna1, HIGH); 
   digitalWrite(Columna2, LOW); 
@@ -368,7 +368,7 @@ int teclado() //una vez que ingreso a la función queda ciclando hasta que se pr
      }
   }//cierro if 1
   digitalWrite(Columna3c, LOW);
-  }//cierro while
+  
 
 
 // agrego  
@@ -481,7 +481,7 @@ float temperatura()
   ds.reset();
   ds.select(addr);
   ds.write(0x44,1);         // start conversion, with parasite power on at the end
-  delay(1000);     // maybe 750ms is enough, maybe not
+  delay(800);     // maybe 750ms is enough, maybe not
   // we might do a ds.depower() here, but the reset will take care of it.
   present = ds.reset();
   ds.select(addr);    
