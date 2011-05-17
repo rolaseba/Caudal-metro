@@ -60,9 +60,11 @@ int outputValue = 0;        // value output to the PWM (analog out)
 
 //**********Velocidad***************
 
+
+
  volatile byte rpmcount;
  unsigned int rpm;
- unsigned long timeold;
+ unsigned long timeold=0;
  
  
 //**********Temperatura************
@@ -72,17 +74,24 @@ OneWire  ds(10);  // on pin 10
 unsigned long timeold1=0;
 
 //***********Caudal****************
- int ancho = 200; 	// en [milimetros], ancho de la canaleta
- float valor_caudal=0; 	// en [m³/s]
- int factor=20;		// valor a setear, explicado mejor en caudal()
+ float ancho = 200; 	        // en [milimetros], ancho de la canaleta
+ float valor_caudal=0; 	        // en [m³/s]
+ float factor=200;		// valor a setear, explicado mejor en caudal()
  
 //************************************
 void setup() 
 {
   Serial.begin(9600); //inicializo la comunicación serie
   lcd.begin(16, 2);         // defino cantidad de columnas y filas del display utilizado
-  lcd.setCursor(0,0);
+   
+  
   pinMode(ledPin, OUTPUT); // si no está asignado no prende el led y queda en un estado intermedio luz ténue
+  
+  //****** velocidad()*************
+  digitalWrite(2, HIGH); //pullup
+  attachInterrupt(0, rpm_fun, RISING); //declaro interrupción 0, es pin 2, cuando interrumpe llama a rpm_fun
+ 
+  
   // inicializo los pines asignados a las columnas como salida
   pinMode(Columna1, OUTPUT);      
   pinMode(Columna2, OUTPUT);      
@@ -191,25 +200,19 @@ void menu_1()
   
   lcd.clear();
   lcd.print("Velocidad");
-  lcd.setCursor(5,1);
+  lcd.setCursor(8,1);
   lcd.print("RPM"); 
   
   while(var1 != 11)
   {
+   
   var1 = teclado();
-  lcd.setCursor(0, 1);
-  mostrar=velocidad();
-  lcd.print(mostrar,0);
   
-  if (mostrar==0)		// se podria simplificar sobreescribiendo 000
-    {
-    lcd.clear();
-    lcd.print("Velocidad");
-    lcd.setCursor(5,1);
-    lcd.print("RPM");
-    lcd.setCursor(0, 1);
-    lcd.print(0);
-    }
+  mostrar=velocidad();
+  lcd.setCursor(0, 1);  
+  lcd.print(mostrar,0); //0 decimales
+  lcd.print("   ");
+ 
   }
 } //cierro menu_1 
  
@@ -218,7 +221,7 @@ void menu_2()
   
   lcd.clear();
   lcd.print("Temperatura");
-  lcd.setCursor(6, 1);
+  lcd.setCursor(8, 1);
   lcd.print("oC");  
   
   
@@ -226,8 +229,7 @@ void menu_2()
   {
   var1 = teclado();
   lcd.setCursor(0, 1);
-  mostrar=temperatura();
-  lcd.print(mostrar);
+  lcd.print(temperatura());
   }
 } //cierro menu_2
  
@@ -245,10 +247,9 @@ void menu_3()
   {
   var1 = teclado();
   
-  mostrar=nivel();
   lcd.setCursor(0,1);
-  lcd.print(mostrar,0);// 0 para mostrar cero decimales
-    
+  lcd.print(nivel());
+  lcd.print("   ");
   }
 
 }//cierro menu_3
@@ -257,7 +258,7 @@ void menu_4()
 {
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Caudal:");
+  lcd.print("Caudal [m3/s]");
  
   var1=20;
   
@@ -265,18 +266,11 @@ void menu_4()
   while(var1 != 11)
   {
   var1 = teclado();
-  
- // mostrar=caudal();
-    
+      
   lcd.setCursor(0,1);
   lcd.print(caudal(),2);// 0 para mostrar cero decimales
-  
-  
-  if (mostrar==0)		// se podria simplificar sobreescribiendo 000
-    {
-    lcd.print(0,5);
-    }
-  
+  lcd.print("     ");
+
   
   }
 
@@ -449,6 +443,8 @@ var1=20; // 20 es el valor que toma var cuando no hay tecla
   
 }//cierro teclado
 
+
+
 //***********************Nivel**********************************************
 
 int nivel()
@@ -475,13 +471,6 @@ return(outputValue);
 
 int velocidad()
 {  
- 
-   digitalWrite(2, HIGH); //pullup
-   attachInterrupt(0, rpm_fun, RISING); //declaro interrupción 0, es pin 2, cuando interrumpe llama a rpm_fun
-   rpmcount = 0;
-   rpm = 0;
-   timeold = 0;
-   delay(1000); 
      
        if (rpmcount >= 20)  
        { 
@@ -490,16 +479,14 @@ int velocidad()
         rpm = 30*1000/(millis() - timeold)*rpmcount; // 1000 para pasar de milis a segundos, 30 porque son 2 pulsos 1 vuelta (60xmin) 
         timeold = millis();   //tiempo de inicio del programa
         rpmcount = 0;
-        Serial.println(rpm,DEC);
-	
-       }//cierro if
-   
+       	}//cierro if
+       	
    return(rpm);
 }//cierro void velocidad
  
-void rpm_fun()
+void rpm_fun()  //esta interrupción esta declarada en setup()
  {
-   rpmcount++;
+   rpmcount++; //ojo con el desbordamiento, tener en cuenta si hay problemas
    //Each rotation, this interrupt function is run twice
  }
 
@@ -597,7 +584,7 @@ float caudal()
   
   
   //convierto rpm en [m/s], para eso debo hacer un ensayo y encontrar un factor de conversión "factor"
-  //por ejemplo si a 20 [rpm], el agua avanza 1[m]  -> factor = 20;
+  //por ejemplo si a 200 [rpm], el agua avanza 1[m/s] (en un segundo) -> factor = 200;
   vel=velocidad()/factor;
    
       valor_caudal=area * vel;   // en [m³/s]
