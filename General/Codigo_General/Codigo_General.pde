@@ -13,6 +13,7 @@ void menu_1();	//menu para velocidad
 void menu_2();	//menu para temperatura
 void menu_3();  //menu para nivel
 void menu_4();  //menu para caudal
+void menu_5();  //Submenú para calibración
 
 //*****Inicialización del display******
 
@@ -140,27 +141,24 @@ lcd.clear();
 lcd.print("1- Velocidad");
 lcd.setCursor(0,1); 
 lcd.print("2- Temperatura");
-delay(400); 
+delay(80); 
 
-  
- 
-var1 = teclado();
+  var1 = teclado();
+
   switch (var1) 
   {
     case 1:  //menu 1
 	menu_1();
-	break;
-          
+        va=1;
+       	break;
     case 2:  //menu 2
 	menu_2();
-	break; 
+        va=1;
+        break; 
     case 11: //tecla * avanza
 	goto otra_vez1;
 	break;
-  
   }
-
-
 goto otra_vez;
 
 otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
@@ -169,32 +167,115 @@ otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
       lcd.print("3- Nivel");
       lcd.setCursor(0,1); 
       lcd.print("4- Caudal");
-      delay(400);
+      delay(80);
 
 var1 = teclado();
    
   switch (var1) 
   {
     case 3:
-      
        menu_3();
+       var1=20;
        break;
-    
     case 4:
        menu_4();
-	break;
-    case 11://tecla * 
+       var1=20;
+       break;
+    case 10://tecla # retrocedo 
       goto otra_vez; //vuelvo a las opciones 1-2
-    
+    case 11://tecla * avanzo 
+      goto otra_vez2; //voy a las opciones 5-6  
   }//cierro switch
 
 goto otra_vez1;
 
+otra_vez2: 
+
+lcd.clear();
+lcd.print("5- Calibración");
+lcd.setCursor(0,1); 
+lcd.print("6- Nada");
+delay(80); 
+
+  var1 = teclado();
+
+  switch (var1) 
+  {
+    case 5:  //menu 1
+	goto otra_vez3; //Submenú Calibración
+        va=1;
+       	break;
+    case 6:  //menu 2
+	break; 
+    case 10: //tecla # retrocede
+	goto otra_vez1; //vuelvo a opciones 3-4
+	break;
+  }
+goto otra_vez2;
+
+otra_vez3: 
+
+lcd.clear();
+lcd.print("1- Seteo Velocidad");
+lcd.setCursor(0,1); 
+lcd.print("2- Seteo Temp.");
+delay(80); 
+
+  var1 = teclado();
+
+  switch (var1) 
+  {
+    case 1:  //menu 1
+        lcd.clear();
+	lcd.print("Seteo V");
+        delay(2500);
+        va=1;
+       	break;
+    case 2:  //menu 2
+        lcd.clear();
+	lcd.print("Seteo T");
+        delay(2500);
+        va=1;
+        break;
+    case 10://tecla # retrocedo 
+        goto otra_vez2; //vuelvo a las opciones 5-6 del menú principal  
+    case 11: //tecla * avanza
+	goto otra_vez4;
+	break;
+  }
+goto otra_vez3;
+
+otra_vez4:        //etiqueta para el salto cuando retrocedo a opciones 3-4
+      
+      lcd.clear();
+      lcd.print("3-Seteo Nivel");
+      lcd.setCursor(0,1); 
+      lcd.print("4-Seteo Caudal");
+      delay(80);
+
+var1 = teclado();
+   
+  switch (var1) 
+  {
+    case 3:
+       lcd.clear();
+       lcd.print("Seteo N");
+       delay(2500);
+       break;
+    case 4:
+       lcd.clear(); 
+       lcd.print("Seteo C");
+       delay(2500);
+       break;
+    case 10://tecla # retrocedo 
+      goto otra_vez3; //vuelvo a las opciones 1-2 del seteo
+   }//cierro switch
+goto otra_vez4;
+
 }//cierro loop()
+
 //------------------------------------------
- 
- 
- 
+  
 void menu_1()
 {
   
@@ -218,13 +299,11 @@ void menu_1()
  
 void menu_2()
 {
-  
   lcd.clear();
   lcd.print("Temperatura");
   lcd.setCursor(8, 1);
   lcd.print("oC");  
-  
-  
+
   while(var1 != 11)
   {
   var1 = teclado();
@@ -241,7 +320,6 @@ void menu_3()
   lcd.print("Nivel:");
  
   var1=20;
-  
   
   while(var1 != 11)
   {
@@ -275,7 +353,8 @@ void menu_4()
   }
 
 }//cierro menu_4
-  
+
+
 
 
 //***********************************************************************************************************************
@@ -450,7 +529,7 @@ var1=20; // 20 es el valor que toma var cuando no hay tecla
 int nivel()
 {
 
-  delay(50);
+  //delay(50);
   // read the analog in value:
   sensorValue = analogRead(analogInPin);   
   
@@ -507,7 +586,7 @@ float temperatura()
      {
       //    Serial.print("No more addresses.\n");  //Aparentemente indica que no hay más dispositivos
       ds.reset_search();
-      delay(250);
+      //delay(250);
   //    return;
      }//cierro if
 
