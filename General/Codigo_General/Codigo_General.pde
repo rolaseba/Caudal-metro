@@ -2,13 +2,17 @@
 #include <OneWire.h> //librería para sensor de temperatura DS18S20
 //****Declaración de funciones*****
 
+
 int velocidad();
 int nivel();
 float temperatura();
 float caudal();
+int seteo(int digitos); //devuelve el valor ingresado de max y min y espera la cantidad de digitos
+                        //que depende de la función que llama ej: temperatura = 2 dígitos que para agua
+                        //donde se crían peces está bien.
 
 void rpm_fun();
-
+int alertas(int caso);
 void menu_1();	//menu para velocidad
 void menu_2();	//menu para temperatura
 void menu_3();  //menu para nivel
@@ -79,7 +83,19 @@ unsigned long timeold1=0;
  float valor_caudal=0; 	        // en [m³/s]
  float factor=200;		// valor a setear, explicado mejor en caudal()
  
-//************************************
+//***********Seteo*******************
+int minimoV=0;
+int maximoV=0;
+int minimoN=0;
+int maximoN=0;
+int minimoT=0;
+int maximoT=0;
+int minimoC=0;
+int maximoC=0;
+int suma=0;
+int n=0;
+
+//***********************************
 void setup() 
 {
   Serial.begin(9600); //inicializo la comunicación serie
@@ -141,7 +157,7 @@ lcd.clear();
 lcd.print("1- Velocidad");
 lcd.setCursor(0,1); 
 lcd.print("2- Temperatura");
-delay(80); 
+delay(100); 
 
   var1 = teclado();
 
@@ -149,11 +165,11 @@ delay(80);
   {
     case 1:  //menu 1
 	menu_1();
-        va=1;
+        //va=1;
        	break;
     case 2:  //menu 2
 	menu_2();
-        va=1;
+        //va=1;
         break; 
     case 11: //tecla * avanza
 	goto otra_vez1;
@@ -167,19 +183,23 @@ otra_vez1:        //etiqueta para el salto cuando retrocedo a opciones 3-4
       lcd.print("3- Nivel");
       lcd.setCursor(0,1); 
       lcd.print("4- Caudal");
-      delay(80);
+      delay(100);
 
 var1 = teclado();
    
   switch (var1) 
   {
+    case 0:
+       goto otra_vez;
+       //var1=20;
+       break;
     case 3:
        menu_3();
-       var1=20;
+       //var1=20;
        break;
     case 4:
        menu_4();
-       var1=20;
+       //var1=20;
        break;
     case 10://tecla # retrocedo 
       goto otra_vez; //vuelvo a las opciones 1-2
@@ -192,18 +212,22 @@ goto otra_vez1;
 otra_vez2: 
 
 lcd.clear();
-lcd.print("5- Calibración");
+lcd.print("5- Calibracion");
 lcd.setCursor(0,1); 
 lcd.print("6- Nada");
-delay(80); 
+delay(100); 
 
   var1 = teclado();
 
   switch (var1) 
   {
+    case 0:
+       goto otra_vez;
+       //var1=20;
+       break;
     case 5:  //menu 1
 	goto otra_vez3; //Submenú Calibración
-        va=1;
+        //va=1;
        	break;
     case 6:  //menu 2
 	break; 
@@ -219,23 +243,59 @@ lcd.clear();
 lcd.print("1- Seteo Velocidad");
 lcd.setCursor(0,1); 
 lcd.print("2- Seteo Temp.");
-delay(80); 
+delay(100); 
 
   var1 = teclado();
 
   switch (var1) 
   {
+    case 0:
+       goto otra_vez;
+       //var1=20;
+       break;
     case 1:  //menu 1
         lcd.clear();
-	lcd.print("Seteo V");
-        delay(2500);
-        va=1;
+	lcd.print("Por defecto:");
+        delay(800);
+        lcd.clear();
+	lcd.print("Min: 120rpm");
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Max: 4000rpm ");
+        delay(2000);
+        lcd.clear();
+	lcd.print("Minimo:");                    //********************************************
+        lcd.setCursor(8,0); //columna - fila
+        minimoV = seteo(3);  //para velocidad 4 digitos máximo, más no se aguanta el cooler
+        lcd.print(minimoV);
+        delay(500);
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Maximo:");                    //********************************************
+        lcd.setCursor(8,1); //columna - fila
+        maximoV = seteo(4);  //para velocidad 4 digitos máximo, más no se aguanta el cooler
+        lcd.print(maximoV);
+        delay(1500);
        	break;
     case 2:  //menu 2
         lcd.clear();
-	lcd.print("Seteo T");
-        delay(2500);
-        va=1;
+	lcd.print("Por defecto:");
+        delay(800);
+        lcd.clear();
+	lcd.print("Min: 12 oC");
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Max: 29 oC ");
+        delay(2000);
+        lcd.clear();
+	lcd.print("Minimo:");                    //********************************************
+        lcd.setCursor(8,0); //columna - fila
+        minimoT = seteo(2);  //para temperatura 2 digitos máximo.
+        lcd.print(minimoT);
+        delay(500);
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Maximo:");                    //********************************************
+        lcd.setCursor(8,1); //columna - fila
+        maximoT = seteo(2);  //para velocidad 4 digitos máximo, más no se aguanta el cooler
+        lcd.print(maximoT);
+        delay(1500);
         break;
     case 10://tecla # retrocedo 
         goto otra_vez2; //vuelvo a las opciones 5-6 del menú principal  
@@ -251,21 +311,59 @@ otra_vez4:        //etiqueta para el salto cuando retrocedo a opciones 3-4
       lcd.print("3-Seteo Nivel");
       lcd.setCursor(0,1); 
       lcd.print("4-Seteo Caudal");
-      delay(80);
+      delay(100);
 
 var1 = teclado();
    
   switch (var1) 
   {
+    case 0:
+       goto otra_vez;
+       //var1=20;
+       break;
     case 3:
-       lcd.clear();
-       lcd.print("Seteo N");
-       delay(2500);
+        lcd.clear();
+	lcd.print("Por defecto:");
+        delay(800);
+        lcd.clear();
+	lcd.print("Min: 0 mm");
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Max: 150mm ");
+        delay(2000);
+        lcd.clear();
+	lcd.print("Minimo:");                    //********************************************
+        lcd.setCursor(8,0); //columna - fila
+        minimoN = seteo(2);  //para temperatura 2 digitos máximo.
+        lcd.print(minimoN);
+        delay(500);
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Maximo:");                    //********************************************
+        lcd.setCursor(8,1); //columna - fila
+        maximoN = seteo(3);  //para velocidad 4 digitos máximo, más no se aguanta el cooler
+        lcd.print(maximoN);
+        delay(1500);
        break;
     case 4:
-       lcd.clear(); 
-       lcd.print("Seteo C");
-       delay(2500);
+       lcd.clear();
+	lcd.print("Por defecto:");
+        delay(800);
+        lcd.clear();
+	lcd.print("Min: 0,12 [m3/s]");
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Max: 0,5  [m3/s] ");
+        delay(2000);
+        lcd.clear();
+	lcd.print("Minimo:");                    //********************************************
+        lcd.setCursor(8,0); //columna - fila
+        minimoC = seteo(3);  //para temperatura 2 digitos máximo.
+        lcd.print(minimoC);
+        delay(500);
+        lcd.setCursor(0,1); //columna - fila
+        lcd.print("Maximo:");                    //********************************************
+        lcd.setCursor(8,1); //columna - fila
+        maximoC = seteo(3);  //para velocidad 4 digitos máximo, más no se aguanta el cooler
+        lcd.print(maximoC);
+        delay(1500);
        break;
     case 10://tecla # retrocedo 
       goto otra_vez3; //vuelvo a las opciones 1-2 del seteo
@@ -278,19 +376,23 @@ goto otra_vez4;
   
 void menu_1()
 {
-  
+otra: 
   lcd.clear();
   lcd.print("Velocidad");
   lcd.setCursor(8,1);
   lcd.print("RPM"); 
-  
+  rpm=0;
   while(var1 != 11)
   {
    
   var1 = teclado();
   
   mostrar=velocidad();
-  lcd.setCursor(0, 1);  
+  if(alertas(1)==1) //a alerta le mando 
+  {
+   goto otra; 
+  }
+  lcd.setCursor(0, 1); 
   lcd.print(mostrar,0); //0 decimales
   lcd.print("   ");
  
@@ -361,7 +463,6 @@ void menu_4()
 
 int teclado() //una vez que ingreso a la función queda ciclando hasta que se presione una tecla y retorna el valor de la misma
 {
-  
   
   // columna1(pin4 teclado - pin 50 micro)  teclas 1-4-7
   digitalWrite(Columna1, HIGH); 
@@ -675,3 +776,190 @@ float caudal()
 
 //********************************************************************
 
+int seteo(int digitos)
+{
+  delay(500);
+vuelvo1:
+  var1=20;
+  suma = 0;
+  n=1;
+  
+vuelvo: 
+  var1=20;
+  while(var1==20)
+  {
+  var1 = teclado();
+  delay(100);
+  }
+  digitalWrite(ledPin, HIGH);  
+  delay(100);
+  digitalWrite(ledPin, LOW);
+
+//*********************************  
+  
+  if(digitos==4) //caso de velocidad máxima
+  {
+    if(n!=digitos)
+    {
+      if(n==1)//primer digito * 1000 corresponde al cuarto
+      {
+       suma = suma + var1*1000; 
+      }//cierro if n==0
+      if(n==2)//primer digito * 100 corresponde a centenas
+      {
+       suma = suma + var1*100; 
+      }//cierro if n==1
+      if(n==3)//primer digito * 10 corresponde a decenas
+      {
+       suma = suma + var1*10; 
+      }//cierro if n==2
+      n=n+1;
+      goto vuelvo;
+    }//cierro if
+  }//cierro if(digitos) 
+  
+//*********************************
+ 
+ if(digitos==3) //caso temperatura, mínimo de velocidad o nivel
+  {
+    if(n!=digitos)
+    {
+      if(n==1)//primer digito * 1000 corresponde al cuarto
+      {
+       suma = suma + var1*100; 
+      }//cierro if n==0
+      if(n==2)//primer digito * 100 corresponde a centenas
+      {
+       suma = suma + var1*10; 
+      }//cierro if n==1
+      n=n+1;
+      goto vuelvo;
+    }//cierro if
+  }//cierro if(digitos) 
+
+//*********************************
+ 
+ if(digitos==2) //caso temperatura o mínimo de velocidad
+  {
+    if(n!=digitos)
+    {
+      if(n==1)//primer digito * 1000 corresponde al cuarto
+      {
+       suma = suma + var1*10; 
+      }//cierro if n==0
+      n=n+1;
+      goto vuelvo;
+    }//cierro if
+  }//cierro if(digitos) 
+
+//*********************************  
+      suma = suma + var1; 
+ /*     if(suma<120||suma>3000)
+      {
+        lcd.clear();
+        lcd.print("El Seteo Excede ");
+        lcd.setCursor(0,1);
+        lcd.print("--Los limites--");
+        delay(2500);
+        lcd.clear();
+        goto vuelvo1;
+      }
+  */
+      return(suma);
+ 
+ }//cierro int seteo
+ 
+ //******************************************************************************
+ 
+ int alertas(int caso)
+ {
+  
+  //*******Velocidad*********
+ if(caso == 1)
+ {
+  if(mostrar < minimoV || mostrar > maximoV )
+  {
+   
+   lcd.clear();
+   lcd.print("Alerta Velocidad");
+   digitalWrite(ledPin, HIGH);  
+   delay(300);
+   digitalWrite(ledPin, LOW);
+   delay(300);
+   lcd.clear();
+   lcd.print("Alerta Velocidad");
+   digitalWrite(ledPin, HIGH);  
+   delay(300);
+   digitalWrite(ledPin, LOW);
+   delay(300);
+   lcd.clear();
+   lcd.print("Alerta Velocidad");
+   digitalWrite(ledPin, HIGH);  
+   delay(300);
+   digitalWrite(ledPin, LOW);
+   delay(300);
+   lcd.clear();
+   lcd.print("Alerta Velocidad");
+   return(1);
+ }//cierro if velocidad 
+ }//cierro if caso1
+ 
+ if(caso == 2)
+ {
+  if(minimoT < 15 || maximoT > 27)
+  {
+   lcd.clear();
+   lcd.print("Alerta Temperat.");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Temperat.");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Temperat.");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Temperat.");
+   return(1); 
+  }//cierro if temp. 
+ }//cierro if caso 2
+ 
+ if(caso == 3)
+ {
+  if(minimoN < 10 || maximoN > 100)
+  {
+   lcd.clear();
+   lcd.print("Alerta Nivel");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Nivel");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Nivel");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Nivel");
+   return(1);
+  }//cierro if nivel 
+ }// if caso 3
+ 
+ if(caso == 4)
+ {
+  if(minimoC < 0,12 || maximoC > 0,3)
+  {
+   lcd.clear();
+   lcd.print("Alerta Caudal");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Caudal");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Caudal");
+   delay(500);
+   lcd.clear();
+   lcd.print("Alerta Caudal");
+   return(1);
+  }//cierro if caudal 
+ }//cierro if caso 4  
+   return(0);
+   
+ }//cierro void alertas
