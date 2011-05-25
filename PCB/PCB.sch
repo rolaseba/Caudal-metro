@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date mié 25 may 2011 12:11:15 ART
+EESchema Schematic File Version 2  date mié 25 may 2011 16:38:06 ART
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -50,6 +50,12 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
+NoConn ~ 9150 7800
+Connection ~ 4950 3600
+Wire Wire Line
+	5300 3600 4950 3600
+Wire Wire Line
+	4950 3600 4950 3400
 Connection ~ 9050 6100
 Wire Wire Line
 	9050 6150 9050 6050
@@ -60,14 +66,7 @@ Wire Wire Line
 Wire Wire Line
 	12800 4950 12800 4700
 Wire Wire Line
-	5200 4200 5200 7800
-Wire Wire Line
-	5200 7800 9150 7800
-Wire Wire Line
 	11050 5850 11500 5850
-Connection ~ 4950 3600
-Wire Wire Line
-	5300 3600 4950 3600
 Wire Notes Line
 	11000 4750 11100 4750
 Wire Notes Line
@@ -75,7 +74,7 @@ Wire Notes Line
 Wire Notes Line
 	11100 4550 11000 4550
 Wire Wire Line
-	9050 3800 9050 3900
+	9050 3900 9050 3800
 Wire Wire Line
 	9050 3900 9150 3900
 Wire Wire Line
@@ -128,10 +127,6 @@ Wire Wire Line
 	3600 5150 3600 2750
 Wire Wire Line
 	13050 3900 13050 4000
-Wire Wire Line
-	5400 4000 5550 4000
-Wire Wire Line
-	4350 4000 4350 3850
 Wire Wire Line
 	11050 7150 12050 7150
 Wire Wire Line
@@ -255,13 +250,6 @@ Wire Wire Line
 Wire Wire Line
 	4950 2900 4950 2750
 Wire Wire Line
-	5000 4000 4850 4000
-Connection ~ 4950 4000
-Wire Wire Line
-	6050 4000 6250 4000
-Wire Wire Line
-	6250 4000 6250 4050
-Wire Wire Line
 	12900 3700 12900 4000
 Wire Wire Line
 	12900 4000 13050 4000
@@ -336,9 +324,9 @@ Wire Notes Line
 Wire Notes Line
 	12650 4400 12650 4450
 Wire Wire Line
-	8800 3850 8800 3800
+	8800 3800 8800 3850
 Wire Wire Line
-	8800 3800 9150 3800
+	9150 3800 8800 3800
 Connection ~ 9050 3800
 Wire Wire Line
 	9050 6050 9150 6050
@@ -350,8 +338,6 @@ Wire Wire Line
 	11150 2700 11150 3200
 Wire Wire Line
 	11150 3200 11050 3200
-Wire Wire Line
-	4950 3400 4950 4000
 Wire Wire Line
 	5500 3600 5950 3600
 Wire Wire Line
@@ -425,16 +411,6 @@ P 5400 3250
 F 0 "P1" V 5350 3250 40  0000 C CNN
 F 1 "back +5V" V 5550 3250 40  0000 C CNN
 	1    5400 3250
-	0    -1   -1   0   
-$EndComp
-$Comp
-L BC548C-NPN-TO92-EBC T1
-U 1 1 4DD6BA68
-P 5200 4100
-F 0 "T1" V 5150 3900 50  0000 L BNN
-F 1 "BC548C-NPN-TO92-EBC" V 4950 3650 50  0000 L BNN
-F 2 "transistor-TO92-EBC" H 5200 4250 50  0001 C CNN
-	1    5200 4100
 	0    -1   -1   0   
 $EndComp
 NoConn ~ 11050 4100
@@ -566,44 +542,6 @@ F 1 "GND" H 13050 3230 30  0001 C CNN
 	1    13050 3300
 	1    0    0    -1  
 $EndComp
-Text Notes 5050 3750 0    60   ~ 0
-Elijo ON/OFF backligth transistor o +5V\nSi puenteo directo no sueldo R1 ni T1
-$Comp
-L GND #PWR010
-U 1 1 4DD6BB76
-P 6250 4050
-F 0 "#PWR010" H 6250 4050 30  0001 C CNN
-F 1 "GND" H 6250 3980 30  0001 C CNN
-	1    6250 4050
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R3
-U 1 1 4DD6BB32
-P 5800 4000
-F 0 "R3" V 5880 4000 50  0000 C CNN
-F 1 "R" V 5800 4000 50  0000 C CNN
-	1    5800 4000
-	0    1    1    0   
-$EndComp
-$Comp
-L R R1
-U 1 1 4DD6BB29
-P 4600 4000
-F 0 "R1" V 4680 4000 50  0000 C CNN
-F 1 "R" V 4600 4000 50  0000 C CNN
-	1    4600 4000
-	0    1    1    0   
-$EndComp
-$Comp
-L +5V #PWR011
-U 1 1 4DD6B81D
-P 4350 3850
-F 0 "#PWR011" H 4350 3940 20  0001 C CNN
-F 1 "+5V" H 4350 3940 30  0000 C CNN
-	1    4350 3850
-	1    0    0    -1  
-$EndComp
 $Comp
 L R R2
 U 1 1 4DD6B631
@@ -614,19 +552,19 @@ F 1 "R" V 4950 3150 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR012
+L GND #PWR010
 U 1 1 4DD6B3E9
 P 5100 3050
-F 0 "#PWR012" H 5100 3050 30  0001 C CNN
+F 0 "#PWR010" H 5100 3050 30  0001 C CNN
 F 1 "GND" H 5100 2980 30  0001 C CNN
 	1    5100 3050
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR013
+L GND #PWR011
 U 1 1 4DD6B325
 P 2250 3700
-F 0 "#PWR013" H 2250 3700 30  0001 C CNN
+F 0 "#PWR011" H 2250 3700 30  0001 C CNN
 F 1 "GND" H 2250 3630 30  0001 C CNN
 	1    2250 3700
 	1    0    0    -1  
@@ -641,19 +579,19 @@ F 1 "preset" H 2250 3250 50  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L +5V #PWR014
+L +5V #PWR012
 U 1 1 4DD5E415
 P 2250 2500
-F 0 "#PWR014" H 2250 2590 20  0001 C CNN
+F 0 "#PWR012" H 2250 2590 20  0001 C CNN
 F 1 "+5V" H 2250 2590 30  0000 C CNN
 	1    2250 2500
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR015
+L GND #PWR013
 U 1 1 4DD5E3F1
 P 2850 2950
-F 0 "#PWR015" H 2850 2950 30  0001 C CNN
+F 0 "#PWR013" H 2850 2950 30  0001 C CNN
 F 1 "GND" H 2850 2880 30  0001 C CNN
 	1    2850 2950
 	1    0    0    -1  
@@ -661,19 +599,19 @@ $EndComp
 Text Notes 1050 900  0    100  ~ 0
 +5V viene de la placa con el micro (usb o conector). \nEsta placa no se alimenta, se cuelga de la otra.
 $Comp
-L +5V #PWR016
+L +5V #PWR014
 U 1 1 4DD5E2E6
 P 8150 3650
-F 0 "#PWR016" H 8150 3740 20  0001 C CNN
+F 0 "#PWR014" H 8150 3740 20  0001 C CNN
 F 1 "+5V" H 8150 3740 30  0000 C CNN
 	1    8150 3650
 	1    0    0    -1  
 $EndComp
 $Comp
-L GND #PWR017
+L GND #PWR015
 U 1 1 4DD5E2A9
 P 8150 4600
-F 0 "#PWR017" H 8150 4600 30  0001 C CNN
+F 0 "#PWR015" H 8150 4600 30  0001 C CNN
 F 1 "GND" H 8150 4530 30  0001 C CNN
 	1    8150 4600
 	1    0    0    -1  
