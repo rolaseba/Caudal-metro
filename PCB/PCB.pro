@@ -1,4 +1,4 @@
-update=vie 20 may 2011 16:25:42 ART
+update=mié 25 may 2011 12:53:51 ART
 last_client=pcbnew
 [general]
 version=1
@@ -71,6 +71,11 @@ LibName34=Carlolib-dev
 LibName35=Mi libreria/mi-libreria
 LibName36=transistor
 LibName37=1wire
+[cvpcb]
+version=1
+NetIExt=net
+[cvpcb/libraries]
+EquName1=devcms
 [pcbnew]
 version=1
 PadDrlX=320
@@ -87,8 +92,8 @@ VEgarde=100
 DrawLar=150
 EdgeLar=150
 TxtLar=120
-MSegLar=150
-LastNetListRead=
+MSegLar=120
+LastNetListRead=PCB.net
 [pcbnew/libraries]
 LibDir=
 LibName1=sockets
@@ -101,8 +106,5 @@ LibName7=display
 LibName8=valves
 LibName9=led
 LibName10=dip_sockets
-LibName11=f_r_lcds2
-LibName12=display-lcd
-LibName13=display-lcd-lxd
-LibName14=transistor
-LibName15=1wire
+LibName11=arduino_shields
+LibName12=Mi libreria/SIL-11

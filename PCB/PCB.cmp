@@ -1,0 +1,136 @@
+Cmp-Mod V01 Created by CvPCB (2011-01-28 BZR 2765)-stable date = mié 25 may 2011 12:18:22 ART
+
+BeginCmp
+TimeStamp = /4DD5DF03;
+Reference = keypad1;
+ValeurCmp = CONN_11;
+IdModule  = SIL-11;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DDC0F4D;
+Reference = P1;
+ValeurCmp = back_+5V;
+IdModule  = PIN_ARRAY_2X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD6BB29;
+Reference = R1;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD6B631;
+Reference = R2;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD6BB32;
+Reference = R3;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E0AB;
+Reference = R4;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E0A5;
+Reference = R5;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E0A1;
+Reference = R6;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E097;
+Reference = R7;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E070;
+Reference = R8;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E085;
+Reference = R9;
+ValeurCmp = R;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD837B5;
+Reference = R10;
+ValeurCmp = 4,7k;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD6B2EE;
+Reference = RV1;
+ValeurCmp = preset;
+IdModule  = TO126V-132;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5E1F3;
+Reference = RV2;
+ValeurCmp = Nivel;
+IdModule  = PIN_ARRAY_3X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD58B14;
+Reference = SHIELD1;
+ValeurCmp = ARDUINO_MEGA_SHIELD;
+IdModule  = ARDUINO_MEGA_SHIELD;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD6BA68;
+Reference = T1;
+ValeurCmp = BC548C-NPN-TO92-EBC;
+IdModule  = TO92-EBC;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD5A65E;
+Reference = U1;
+ValeurCmp = LCD_HD44870;
+IdModule  = SIL-16;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DDAA946;
+Reference = U2;
+ValeurCmp = HALL;
+IdModule  = PIN_ARRAY_3X1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DD6C842;
+Reference = U3;
+ValeurCmp = DS1820;
+IdModule  = PIN_ARRAY_3X1;
+EndCmp
+
+EndListe
