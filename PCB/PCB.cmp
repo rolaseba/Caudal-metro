@@ -1,4 +1,25 @@
-Cmp-Mod V01 Created by CvPCB (2011-01-28 BZR 2765)-stable date = mié 25 may 2011 12:18:22 ART
+Cmp-Mod V01 Created by CvPCB (2011-01-28 BZR 2765)-stable date = jue 26 may 2011 17:18:38 ART
+
+BeginCmp
+TimeStamp = /4DDEB20F;
+Reference = D1;
+ValeurCmp = LED;
+IdModule  = LED-3MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DDEB21A;
+Reference = D2;
+ValeurCmp = LED;
+IdModule  = LED-3MM;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DDEB3D1;
+Reference = D3;
+ValeurCmp = LED;
+IdModule  = LED-3MM;
+EndCmp
 
 BeginCmp
 TimeStamp = /4DD5DF03;
@@ -15,7 +36,7 @@ IdModule  = PIN_ARRAY_2X1;
 EndCmp
 
 BeginCmp
-TimeStamp = /4DD6BB29;
+TimeStamp = /4DDEB1E0;
 Reference = R1;
 ValeurCmp = R;
 IdModule  = R3;
@@ -29,7 +50,7 @@ IdModule  = R3;
 EndCmp
 
 BeginCmp
-TimeStamp = /4DD6BB32;
+TimeStamp = /4DDEB1EA;
 Reference = R3;
 ValeurCmp = R;
 IdModule  = R3;
@@ -38,42 +59,42 @@ EndCmp
 BeginCmp
 TimeStamp = /4DD5E0AB;
 Reference = R4;
-ValeurCmp = R;
+ValeurCmp = 4,7K;
 IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /4DD5E0A5;
 Reference = R5;
-ValeurCmp = R;
+ValeurCmp = 4,7K;
 IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /4DD5E0A1;
 Reference = R6;
-ValeurCmp = R;
+ValeurCmp = 4,7K;
 IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /4DD5E097;
 Reference = R7;
-ValeurCmp = R;
+ValeurCmp = 4,7K;
 IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /4DD5E070;
 Reference = R8;
-ValeurCmp = R;
+ValeurCmp = 4,7K;
 IdModule  = R3;
 EndCmp
 
 BeginCmp
 TimeStamp = /4DD5E085;
 Reference = R9;
-ValeurCmp = R;
+ValeurCmp = 4,7K;
 IdModule  = R3;
 EndCmp
 
@@ -81,6 +102,13 @@ BeginCmp
 TimeStamp = /4DD837B5;
 Reference = R10;
 ValeurCmp = 4,7k;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4DDEB338;
+Reference = R11;
+ValeurCmp = R;
 IdModule  = R3;
 EndCmp
 
@@ -103,13 +131,6 @@ TimeStamp = /4DD58B14;
 Reference = SHIELD1;
 ValeurCmp = ARDUINO_MEGA_SHIELD;
 IdModule  = ARDUINO_MEGA_SHIELD;
-EndCmp
-
-BeginCmp
-TimeStamp = /4DD6BA68;
-Reference = T1;
-ValeurCmp = BC548C-NPN-TO92-EBC;
-IdModule  = TO92-EBC;
 EndCmp
 
 BeginCmp
