@@ -26,17 +26,17 @@ void menu_5();  //Submenú para calibración
 LiquidCrystal lcd(12, 11, 5, 4, 3, 7);
 
 //***********Teclado*****************
-const int Columna1 = 50;      // Numero de pin asignado a columna1, pin 4 del teclado
-const int Columna2 = 48;      // Numero de pin asignado a columna2, pin 6 del teclado
+const int Columna1 = 46;      // Numero de pin asignado a columna1, pin 4 del teclado
+const int Columna2 = 42;      // Numero de pin asignado a columna2, pin 6 del teclado
 const int Columna3a = 52;     // Numero de pin asignado a columna3a, pin 1 del teclado
-const int Columna3b = 46;     // Numero de pin asignado a columna3b, pin 8 del teclado
-const int Columna3c = 44;     // Numero de pin asignado a columna3c, pin 10 del teclado
+const int Columna3b = 38;     // Numero de pin asignado a columna3b, pin 8 del teclado
+const int Columna3c = 34;     // Numero de pin asignado a columna3c, pin 10 del teclado
 
-const int Fila1 = 42;     // Numero de pin asignado a fila 1, pin 2 del teclado
-const int Fila2 = 40;     // Numero de pin asignado a fila 2, pin 3 del teclado
-const int Fila3 = 38;     // Numero de pin asignado a fila 3, pin 5 del teclado
-const int Fila4a = 36;     // Numero de pin asignado a fila 4a, pin 7 del teclado
-const int Fila4b = 34;     // Numero de pin asignado a fila 4b, pin 9 del teclado
+const int Fila1 = 50;     // Numero de pin asignado a fila 1, pin 2 del teclado
+const int Fila2 = 48;     // Numero de pin asignado a fila 2, pin 3 del teclado
+const int Fila3 = 44;     // Numero de pin asignado a fila 3, pin 5 del teclado
+const int Fila4a = 40;     // Numero de pin asignado a fila 4a, pin 7 del teclado
+const int Fila4b = 36;     // Numero de pin asignado a fila 4b, pin 9 del teclado
 const int Fila4c = 32;     // Numero de pin asignado a fila 4c, pin 11 del teclado
 
 const int ledPin =  13;       // the number of the LED pin
@@ -64,7 +64,7 @@ const int analogOutPin = 13; // Analog output pin that the LED is attached to
 
 int sensorValue = 0;        // value read from the pot
 int outputValue = 0;        // value output to the PWM (analog out)
-
+int nivel1;
 //**********Velocidad***************
 
 
@@ -76,7 +76,7 @@ int outputValue = 0;        // value output to the PWM (analog out)
  
  
 //**********Temperatura************
-
+int temp1 = 0;
 float temp;
 OneWire  ds(10);  // on pin 10
 unsigned long timeold1=0;
@@ -216,7 +216,7 @@ otra_vez2:
 lcd.clear();
 lcd.print("5- Calibracion");
 lcd.setCursor(0,1); 
-lcd.print("6- Nada");
+lcd.print("6- Processing");
 delay(100); 
 
   var1 = teclado();
@@ -232,6 +232,7 @@ delay(100);
         //va=1;
        	break;
     case 6:  //menu 2
+	goto otra_vez5;
 	break; 
     case 10: //tecla # retrocede
 	goto otra_vez1; //vuelvo a opciones 3-4
@@ -368,6 +369,78 @@ var1 = teclado();
    }//cierro switch
 goto otra_vez4;
 
+//////////////////////////////////////////////************************************
+otra_vez5:
+lcd.clear();
+lcd.print("1- Velocidad");
+lcd.setCursor(0,1); 
+lcd.print("2- Temperatura");
+delay(100); 
+
+  var1 = teclado();
+
+  switch (var1) 
+  {
+    case 0:
+       goto otra_vez;
+       
+       break;
+    case 1:  //Processing Velocidad
+	    lcd.clear();
+        lcd.print("Proces. Velocidad");
+		//delay(1000);
+		ProcessingVelocidad();
+       	break;
+    case 2:  //Processing Temperatura
+	    lcd.clear();
+        lcd.print("Proces. Temp.");
+		//delay(1000);
+		ProcessingTemperatura();
+        break; 
+	case 10://tecla # retrocedo 
+      goto otra_vez2; //vuelvo a las opciones 1-2 del seteo	
+    case 11: //tecla * avanza
+	goto otra_vez6;
+	break;
+  }
+goto otra_vez5;
+
+otra_vez6:        
+      
+      lcd.clear();
+      lcd.print("3- Nivel");
+      lcd.setCursor(0,1); 
+      lcd.print("4- Caudal");
+      delay(100);
+
+var1 = teclado();
+   
+  switch (var1) 
+  {
+    case 0:
+       goto otra_vez; //Vuelvo al principio del menú principal
+       
+       break;
+    case 3:   //Processing Nivel
+       lcd.clear();
+       lcd.print("Proces. Nivel");
+	   //delay(1000);
+	   ProcessingNivel();
+       break;
+    case 4:   //Processing Caudal
+       lcd.clear();
+       lcd.print("Proces. Caudal");
+	   delay(2500);
+       break;
+    case 10://tecla # retrocedo 
+      goto otra_vez5; //vuelvo a las opciones 1-2
+      
+  }//cierro switch
+
+goto otra_vez6;
+
+//////////////////////////////////////////////************************************
+
 }//cierro loop()
 
 void menu_1()
@@ -412,7 +485,7 @@ otra1:
    goto otra1; 
   }
   lcd.setCursor(0, 1); 
-  lcd.print(temperatura(),0); //0 decimales
+  lcd.print(temperatura(),2); //2 decimales
   lcd.print("   ");
   //lcd.setCursor(0, 1);
   //lcd.print(temperatura());
@@ -422,19 +495,24 @@ otra1:
  
 void menu_3()
 {
-  lcd.clear();
-  lcd.setCursor(0,0);
-  lcd.print("Nivel:");
- 
   var1=20;
   
   while(var1 != 11)
   {
   var1 = teclado();
   
+  nivel1 = (255 - nivel())*10; // abajo me da 0mm
+  
+  lcd.clear();
+  
+  //lcd.setCursor(0,0);
+  lcd.print("Nivel:");
   lcd.setCursor(0,1);
-  lcd.print(nivel());
-  lcd.print("   ");
+  
+  lcd.print(nivel1);
+  lcd.setCursor(4,1);
+  lcd.print("mm de Agua");
+  //lcd.print("   ");
   }
 
 }//cierro menu_3
@@ -632,7 +710,7 @@ int nivel()
   
   // map it to the range of the analog out:
   outputValue = map(sensorValue, 0, 1023, 0, 255);  //valor escalado
-  
+  //ouput
   
   // wait 10 milliseconds before the next loop
   // for the analog-to-digital converter to settle
@@ -917,3 +995,123 @@ vuelvo:
    return(0);
    
  }//cierro void alertas
+
+ 
+///////***************************************************************************************************************************** 
+
+void ProcessingNivel()
+{
+  var1=20;
+  while(var1 != 11)
+  {
+   
+  var1 = teclado();
+  
+  sensorValue = analogRead(analogInPin);   
+  //outputValue = map(sensorValue, 0, 1023, 0, 255);  //valor escalado
+  Serial.println(sensorValue);
+  delay(40);                  
+  }//cierro while
+  
+}//cierro void nivel
+
+void ProcessingVelocidad()
+{ //unsigned long resta; 
+      var1=20;
+	  while(var1 != 11)
+      {
+   
+       var1 = teclado();
+       if (rpmcount >= 20)  
+       { 
+        // Update RPM every 20 counts, increase this for better RPM resolution,
+        // decrease for faster update
+        rpm = 30*1000/(millis() - timeold)*rpmcount; // 1000 para pasar de milis a segundos, 30 porque son 2 pulsos 1 vuelta (60xmin) 
+        timeold = millis();   //tiempo de inicio del programa
+        rpmcount = 0;
+       	}//cierro if
+		Serial.println(rpm);
+        delay(10);
+      }//cierro while
+    	  
+   
+}//cierro void velocidad
+
+
+void ProcessingTemperatura()
+{
+ 
+    byte i;
+    byte present = 0;
+    byte data[12];
+    byte addr[8];
+    
+    byte signo;
+	var1=20;
+    while(var1 != 11)
+    {
+    
+    var1 = teclado();
+    
+    if ( !ds.search(addr)) 
+     {
+      //    Serial.print("No more addresses.\n");  //Aparentemente indica que no hay más dispositivos
+      ds.reset_search();
+      //delay(250);
+  //    return;
+     }//cierro if
+
+  ds.reset();
+  ds.select(addr);
+  ds.write(0x44,1);         // start conversion, with parasite power on at the end
+  //if(800 > (millis() - timeold1) ) //solo manda por el puerto serie si pasaron 800ms para que sea posible la conversion
+  // { 
+  //Serial.print(temp,2);
+    delay(40);
+    Serial.println(temp,1);
+  // }
+    
+  
+ // timeold1 = millis();
+  //delay(800);  
+  
+  present = ds.reset();
+  ds.select(addr);    
+  ds.write(0xBE);         // Read Scratchpad
+  for ( i = 0; i < 9; i++) 
+  {           // we need 9 bytes
+    data[i] = ds.read();
+   //    Serial.print(data[i], HEX);    //este paso se podría evitar, manda al puerto serie toda la pila leida, a mi solo me interesan 2
+   // bytes
+   //    Serial.print(" ");
+
+  }//cierro for
+  temp=data[0];
+  if(data[1]>0)
+    temp=temp * -1;        // acomoda para temperaturas negativas (comprobar)
+  temp=temp/2;
+  
+  }//cierro while
+ }//cierro void temperatura
+
+void ProcessingCaudal()
+{
+  float vel;
+  float area;
+  
+  // Supongo que el ancho=200 milimetros. Fue definido arriba pero luego debería setearse
+  // ver si se puede grabar en la EEPROM los sets 
+  // Supongo que nivel() devuelve en milimetros  
+  area=(nivel()*ancho)/100; // la cuenta es en [mm] pero /100 para pasar a [metro]
+  
+  
+  //convierto rpm en [m/s], para eso debo hacer un ensayo y encontrar un factor de conversión "factor"
+  //por ejemplo si a 200 [rpm], el agua avanza 1[m/s] (en un segundo) -> factor = 200;
+  vel=velocidad()/factor;
+   
+      valor_caudal=area * vel;   // en [m³/s]
+    
+  
+  
+  
+}//cierro void caudal
